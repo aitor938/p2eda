@@ -1,8 +1,8 @@
 //Jose Luis Varo Guzmán - NIP: 697662
 class Elemento<Id extends Comparable<Id>, In>{
 	
-	Elemento siguiente = null;
-	Elemento anterior = null;
+	private Elemento siguiente = null;
+	private Elemento anterior = null;
 	private Id id;
 	public In in;
 
