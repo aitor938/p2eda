@@ -1,17 +1,17 @@
 package P2EDA;
 
 
-public class Elemento<Id extends Comparable<Id>, In> {
+public class NodoArbol<Id extends Comparable<Id>, In> {
 
     private Id identificador;
     private In informacion;
-    private Elemento<Id, In> izquierda; //puntero que enlaca con el siguiente
-    private Elemento<Id, In> derecha; 
+    private NodoArbol<Id, In> izquierda; //puntero que enlaca con el siguiente
+    private NodoArbol<Id, In> derecha; 
 
-    public Elemento() {
+    public NodoArbol() {
     }
 
-    public Elemento(Id identificador, In informacion) {
+    public NodoArbol(Id identificador, In informacion) {
         this.identificador = identificador;
         this.informacion = informacion;
     }
@@ -32,26 +32,26 @@ public class Elemento<Id extends Comparable<Id>, In> {
         this.informacion = informacion;
     }
 
-    public boolean esMayor (Elemento<Id,In> elemento){
+    public boolean esMayor (NodoArbol<Id,In> elemento){
         if(identificador.compareTo(elemento.getIdentificador()) > 0){
             return true;
         }
         return false;
     }
 
-    public Elemento<Id, In> getIzquierda() {
+    public NodoArbol<Id, In> getIzquierda() {
         return izquierda;
     }
 
-    public void setIzquierda(Elemento<Id, In> izquierda) {
+    public void setIzquierda(NodoArbol<Id, In> izquierda) {
         this.izquierda = izquierda;
     }
 
-    public Elemento<Id, In> getDerecha() {
+    public NodoArbol<Id, In> getDerecha() {
         return derecha;
     }
 
-    public void setDerecha(Elemento<Id, In> derecha) {
+    public void setDerecha(NodoArbol<Id, In> derecha) {
         this.derecha = derecha;
     }
 }
