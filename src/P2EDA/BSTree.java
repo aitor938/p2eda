@@ -62,7 +62,7 @@ public class BSTree<E extends Comparable<E>>{
 	 * 
 	 * El valor es 'false' si no se especifica al llamar a la funcion.
 	 * En caso de que se encuentre el mismo valor que se intentaba
-	 *  introducir (y la exclusividad sea 'true'), la funcion fallara¡ y
+	 *  introducir (y la exclusividad sea 'true'), la funcion fallara y
 	 *  devolvera false.
 	 */
 
@@ -87,12 +87,21 @@ public class BSTree<E extends Comparable<E>>{
 
 	private int addNewTree(BSTree<E> newTree){
 		//!!--WIP--!!//
-		//BSTree<E> parentTree = findTree(newTree.getE(),
-		// GIVE_PARENT_IF_NOT_FOUND);
+		BSTree<E> parentTree = findTree(newTree.getE(),
+		 GIVE_PARENT_IF_NOT_FOUND);
 		
-		//if parentTree == null
-		 
-		 
+		if (parentTree == null) {
+			parentTree.setE(newTree.getE());
+		}
+		if (parentTree.compare(newTree) == GREATER_THAN
+		 || parentTree.compare(newTree) == EQUAL){
+			parentTree.setLeft(newTree);
+		}
+		if (parentTree.compare(newTree) == LESSER_THAN){
+			parentTree.setRight(newTree);
+		}
+		
+		
 		return 0;
 	}
 
@@ -145,12 +154,16 @@ public class BSTree<E extends Comparable<E>>{
 	private BSTree<E> search(E e){
 		if (e == null){
 			return null;
-		} else if (getLeft() != null){
-			if (compare(e) == GREATER_THAN){
+		}
+		
+		if (getLeft() != null){
+			if (this.compare(e) == GREATER_THAN){
 				return getLeft().search(e);
 			}
-		} else if (getRight() != null) {
-			if (compare(e) == LESSER_THAN){
+		}
+		
+		if (getRight() != null) {
+			if (this.compare(e) == LESSER_THAN){
 				return getRight().search(e);
 			}
 		}
@@ -167,11 +180,38 @@ public class BSTree<E extends Comparable<E>>{
 
 
 	//----------------------------------------------------------------//
-
-	public int compare(E e){
-		return this.e.compareTo(e);
+	//-- Comparar un elemento ----------------------------------------//
+	
+	/* Mediante compare(...), devolver el valor devuelto por compareTo
+	 *  (suponiendo que sigue el estandar, debería ser '-1', '0' ó '1')
+	 * 
+	 * 		compare(BSTree<E>)
+	 * 		compare(BSTree<E>, BSTree<E>)
+	 * 		compare(E)
+	 * 		compare(E, E)
+	 * 
+	 * Todas las funciones acaban llamando a 'compare(E, E)'
+	 * 
+	 */
+	 
+	public int compare(BSTree<E> t){
+		return compare(this.e, t.getE());
 	}
-
+	
+	public int compare(BSTree<E> t1, BSTree<E> t2){
+		return compare(t1.getE(), t2.getE());
+	}
+	
+	public int compare(E e){
+		return compare(this.e, e);
+	}
+	
+	public int compare(E e1, E e2){
+		return e1.compareTo(e2);
+	}
+	
+	//----------------------------------------------------------------//
+	
     public BSTree<E> getLeft() {
         return left;
     }
