@@ -87,6 +87,12 @@ public class BSTree<E extends Comparable<E>>{
 
 	private int addNewTree(BSTree<E> newTree){
 		//!!--WIP--!!//
+		//BSTree<E> parentTree = findTree(newTree.getE(),
+		// GIVE_PARENT_IF_NOT_FOUND);
+		
+		//if parentTree == null
+		 
+		 
 		return 0;
 	}
 
@@ -139,10 +145,14 @@ public class BSTree<E extends Comparable<E>>{
 	private BSTree<E> search(E e){
 		if (e == null){
 			return null;
-		} else if (compare(e) == GREATER_THAN && getLeft() != null){
-			return getLeft().search(e);
-		} else if (compare(e) == LESSER_THAN && getRight() != null) {
-			return getRight().search(e);
+		} else if (getLeft() != null){
+			if (compare(e) == GREATER_THAN){
+				return getLeft().search(e);
+			}
+		} else if (getRight() != null) {
+			if (compare(e) == LESSER_THAN){
+				return getRight().search(e);
+			}
 		}
 		return this;
 	}
