@@ -8,7 +8,22 @@ public class ColeccionAbb<Id extends Comparable<Id>, In> implements Coleccion<Id
     
     @Override
     public boolean meter(Id identificador, In informacion) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        NodoArbol<Id,In> elemento = new NodoArbol<>(identificador, informacion);
+        if (raiz == null){
+            raiz = elemento;
+        } else {
+            if (raiz.esMayor(elemento)){
+                meterRec(raiz.getDerecha(),elemento,raiz);
+            } else {
+                
+            }
+        }
+        return false;
+    }
+    
+    private boolean meterRec(NodoArbol<Id,In> actual, NodoArbol<Id,In> elemento,NodoArbol<Id,In> anterior){ //el que era el actial ahora es el anterior
+        
+        return false;
     }
 
     @Override
@@ -28,12 +43,12 @@ public class ColeccionAbb<Id extends Comparable<Id>, In> implements Coleccion<Id
 
     @Override
     public int size() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return size;
     }
 
     @Override
     public boolean esVacia() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        return raiz == null;
     }
 
     @Override
