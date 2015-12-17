@@ -1,7 +1,3 @@
-package P2EDA;
-
-//Jose Luis Varo Guzm�n
-
 public interface Coleccion<Id extends Comparable<Id>, In> {
 
 	public boolean meter(Id identificador, In informacion);
@@ -18,10 +14,9 @@ public interface Coleccion<Id extends Comparable<Id>, In> {
         
         public String listar();
         
-        public void iniciarIterador();
+        //public void iniciarIterador();
         
-        public boolean existeSiguiente();
+        //public boolean existeSiguiente();
         
-        public Tupla<Id,In> siguiente();
-	
+        //public Tupla<Id,In> siguiente();
 }
