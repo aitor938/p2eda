@@ -1,91 +1,69 @@
-public class ColeccionAbb<Id extends Comparable<Id>, In>extends
- BSTree<Tupla<Id,In>> implements Coleccion<Id, In> {
+public class ColeccionAbb<Id extends Comparable<Id>,In> implements Coleccion<Id,In> {
 
-    //private NodoArbol<Id, In> raiz;
-    private int size;
-    //private NodoArbol<Id, In> iterador;
+	private BSTree<Tupla<Id,In>> raiz = new BSTree<>();
+	private int size = 0;
 
-    public boolean meter(Id identificador, In informacion) {
-        //Modificar para BSTree
-        /*NodoArbol<Id, In> elemento = new NodoArbol<>(identificador, informacion);
-        if (raiz == null) {
-            raiz = elemento;
-            size++; //contador de elementos
-            return true;
-        } else if (raiz.esMayor(elemento)) {
-            return meterRec(raiz.getIzquierda(), elemento, raiz, false);
-        } else {
-            return meterRec(raiz.getDerecha(), elemento, raiz, true);
-        }*/
-        return true;
-    }
+	public boolean meter(Id identificador, In informacion) {
+		Tupla<Id,In> nuevaTupla = new Tupla<>(identificador,
+		 informacion);
 
-    
-    //Modificar para BSTree
-    //el booleano es para cuando lleguemos a nil saber que camino es 
-    //sin necesidad de volver a comparar el anterior con el elemento 
-    //recorrido; el que era el actial ahora es el anterior
-    /*private boolean meterRec(NodoArbol<Id, In> actual,
-            NodoArbol<Id, In> elemento, NodoArbol<Id, In> anterior, boolean esMayor) {
-        if (actual == null) {
-            if (esMayor) {
-                anterior.setDerecha(elemento);
-            } else {
-                anterior.setIzquierda(elemento);
-            }
-            size++;
-            return true;
-        } else if (actual.esMayor(elemento)) {
-            return meterRec(actual.getIzquierda(), elemento, actual, false);
-        } else {
-
-            return meterRec(actual.getDerecha(), elemento, actual, true);
-        }
-    }*/
-
-    public boolean estaElemento(Id identificador) {
-        //Compueba la existencia de la Tupla mediante una Tupla "dummy"
-		return isThere(new Tupla<Id,In>(identificador, null));
-    }
-    
-    //!!IMPORTANTE!!//
-    //public In obtenerInformacion(Id identificador) {}
-
-    public boolean borrar(Id identificador) {
-        //WIP
-        return true;
-    }
-
-    public int size() {
-        return size;
-    }
-
-    public boolean esVacia() {
-        //WIP
-        return true;
-    }
-
-    public String listar() {String listado = "";
-	/*
-		iniciarIterador();
-		while (haySiguiente()) {
-			try {
-				siguiente();
-				listado = listado + elemento.toString() + "\n";
-			} catch (NoHaySiguienteException e) {}
+		//Si no existía, meter
+		if (!esta(identificador)){
+			if (raiz.add(nuevaTupla, BSTree.ADD_IS_EXCLUSIVE)) {
+				size++;
+				return true;
+			}
+		//Si ya existia, actualizar
+		}else{
+			raiz.findTree(nuevaTupla).setE(nuevaTupla);
 		}
-	*/
-		return listado;
+		return false;
 	}
-    }
 
-    //Necesario?
-    //public void iniciarIterador() {}
+	public boolean esta(Id identificador) {
+		//Compueba la existencia de la Tupla mediante una Tupla "dummy"
+		return raiz.isThere(new Tupla<Id,In>(identificador, null));
+	}
 
-    public boolean existeSiguiente() {
-        //WIP
-        return true;
-    }
+	public In obtenerInformacion(Id identificador) {
+		//Buscamos mediante una Tupla "dummy"
+		Tupla<Id,In> tupla = new Tupla<>(identificador,null);
+		return raiz.findTree(tupla).getE().getInformacion();
+	}
 
-    //public Tupla<Id, In> siguiente() {}
+	public boolean borrar(Id identificador) {
+		//Borramos mediante una Tupla "dummy"
+		Tupla<Id,In> tupla = new Tupla<>(identificador, null);
+		boolean deleteResult;
+		if (esta(identificador)){
+			if (deleteResult = raiz.delete(tupla)){
+				size--;
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public int size() {
+		return size;
+	}
+
+	public boolean esVacia() {
+		return size == 0;
+	}
+
+	public String listar(){
+		return recorrer(raiz, "");
+	}
+
+	private String recorrer(BSTree<Tupla<Id,In>> arbol, String cadena){
+		if (arbol != null){
+			cadena = recorrer(arbol.getLeft(), cadena);
+			cadena = recorrer(arbol.getRight(), cadena);
+			if (arbol.getE() != null){
+				cadena += arbol.getE().toString() + "\n";
+			}
+		}
+		return cadena;
+	}
 }
