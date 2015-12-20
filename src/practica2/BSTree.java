@@ -1,3 +1,7 @@
+//Jose Luis Varo Guzmán - NIP: 697662
+//Aitor Arcos Almazaán - NIP: 705303
+package practica2;
+
 //====================================================================//
 //======================== BINARY SEARCH TREE ========================//
 //====================================================================//
@@ -13,8 +17,10 @@ public class BSTree<E extends Comparable<E>> {
 	//!!-| Estas constantes son para mayor legibilidad; |-------------!!
 	//!!-|  no deberias cambiar sus valores.			|-------------!!
 
-	 public static final boolean NON_EXCLUSIVE = false;
-	 public static final boolean SAVE_CHILDREN = true;
+	 public static final boolean ADD_IS_EXCLUSIVE = false;
+	 public static final boolean ADD_IS_NON_EXCLUSIVE = false;
+	 public static final boolean DELETE_SAVES_CHILDREN = true;
+	 public static final boolean DELETE_DISCARDS_CHILDREN = true;
 	 public static final boolean GIVE_PARENT_IF_NOT_FOUND = true;
 	 public static final int NO_HEIGHT = -1;
 
@@ -23,6 +29,8 @@ public class BSTree<E extends Comparable<E>> {
 	 private static final int LESSER_THAN = -1;
 	 private static final int EQUAL = 0;
 	 private static final int GREATER_THAN = 1;
+	 //En caso de que por lo menos uno de ellos sea null
+	 private static final int NOT_COMPARABLE = 2;
 
 	//!!--------------------------------------------------------------!!
 	//================================================================//
@@ -64,7 +72,7 @@ public class BSTree<E extends Comparable<E>> {
 	 */
 
 	public boolean add(E e) {
-		return add(new BSTree<E>(e), NON_EXCLUSIVE);
+		return add(new BSTree<E>(e), ADD_IS_NON_EXCLUSIVE);
 	}
 
 	public boolean add(E e, boolean beExclusive) {
@@ -72,14 +80,16 @@ public class BSTree<E extends Comparable<E>> {
 	}
 
 	public boolean add(BSTree<E> newTree) {
-		return add(newTree, NON_EXCLUSIVE);
+		return add(newTree, ADD_IS_NON_EXCLUSIVE);
 	}
 
 	public boolean add(BSTree<E> newTree, boolean beExclusive) {
 		if ((beExclusive && !isThere(newTree)) || !beExclusive
-		 && newTree.getE() != null) {
-			addNewTree(newTree);
-			return true;
+		 && newTree != null) {
+			if (newTree.getE() != null){
+				addNewTree(newTree);
+				return true;
+			}
 		}
 		return false;
 	}
@@ -95,7 +105,6 @@ public class BSTree<E extends Comparable<E>> {
 			add(newTree.getRight());
 			return true;
 		} else if(parentTree != null){
-
 			//Padre mayor o igual que nuevo arbol => Izquierda
 			if (parentTree.compare(newTree) == GREATER_THAN
 			 || parentTree.compare(newTree) == EQUAL) {
@@ -136,7 +145,7 @@ public class BSTree<E extends Comparable<E>> {
 	 */
 
 	public boolean delete(E e) {
-		return delete(findTree(e), SAVE_CHILDREN);
+		return delete(findTree(e), DELETE_SAVES_CHILDREN);
 	}
 
 	public boolean delete(E e, boolean keepChildren) {
@@ -144,7 +153,7 @@ public class BSTree<E extends Comparable<E>> {
 	}
 
 	public boolean delete(BSTree<E> tree) {
-		return delete(tree, SAVE_CHILDREN);
+		return delete(tree, DELETE_SAVES_CHILDREN);
 	}
 
 	public boolean delete(BSTree<E> tree, boolean keepChildren) {
@@ -161,16 +170,20 @@ public class BSTree<E extends Comparable<E>> {
 			//Si tenemos padre, que corte lazos con nosotros
 			if (tree.getHeight() > 0){
 				//Nos buscamos a nosotros mismos, pero nos detenemos
-				// una altura antes de encontrarnos. Éste será nuestro
+				// una altura antes de encontrarnos. Este sera nuestro
 				// padre
-				parent = findTree(tree.getE(),
-				 tree.getHeight() - 1);
+				parent = findTree(tree.getE(), tree.getHeight() - 1);
 
-				if(parent.getLeft().compare(tree) == LESSER_THAN){
-					parent.setLeft(null);
-				} else if(parent.getRight().compare(tree) == EQUAL){
-					parent.setRight(null);
-				}
+					if (parent.getLeft() != null){
+						if(parent.getLeft().compare(tree)
+						 == LESSER_THAN){
+							parent.setLeft(null);
+						}
+					} else if(parent.getRight() != null){
+						if(parent.getRight().compare(tree) == EQUAL){
+							parent.setRight(null);
+						}
+					}
 
 			//Si no, nos vaciamos, y hacemos de padre
 			} else {
@@ -236,7 +249,7 @@ public class BSTree<E extends Comparable<E>> {
 	}
 
 	public BSTree<E> findTree(E e, boolean areParentsFineToo) {
-		return findTree(e, !areParentsFineToo, NO_HEIGHT);
+		return findTree(e, areParentsFineToo, NO_HEIGHT);
 	}
 
 	public BSTree<E> findTree(E e, boolean areParentsFineToo, int searchHeight) {
@@ -246,7 +259,7 @@ public class BSTree<E extends Comparable<E>> {
 		} else {
 			tree = search(e, searchHeight);
 			if (tree.compare(e) == EQUAL) {
-				return tree;
+					return tree;
 			}
 		}
 		return null;
@@ -294,26 +307,30 @@ public class BSTree<E extends Comparable<E>> {
 	 *
 	 */
 
-	public int compare(BSTree<E> t) {
+	protected int compare(BSTree<E> t) {
 		return compare(this.e, t.getE());
 	}
 
-	public int compare(BSTree<E> t1, BSTree<E> t2) {
+	protected int compare(BSTree<E> t1, BSTree<E> t2) {
 		return compare(t1.getE(), t2.getE());
 	}
 
-	public int compare(E e) {
+	protected int compare(E e) {
 		return compare(this.e, e);
 	}
 
-	public int compare(E e1, E e2) {
-		return e1.compareTo(e2);
+	protected int compare(E e1, E e2) {
+		if (e1 != null && e2 != null){
+			return e1.compareTo(e2);
+		}
+		return NOT_COMPARABLE;
 	}
 
 	//----------------------------------------------------------------//
 	//-- Funciones I/O -----------------------------------------------//
 	/*
 	 * Introducir y obtener datos del BSTree
+	 *
 	 *  	getLeft()
 	 * 		setLeft(BSTree<E>)
 	 *

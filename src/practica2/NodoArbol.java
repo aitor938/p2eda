@@ -1,5 +1,6 @@
-
-package P2EDA;
+//Jose Luis Varo Guzmán - NIP: 697662
+//Aitor Arcos Almazaán - NIP: 705303
+package practica2;
 
 
 public class NodoArbol<Id extends Comparable<Id>, In> {
