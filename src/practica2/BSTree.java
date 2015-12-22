@@ -1,6 +1,10 @@
-//Jose Luis Varo Guzmán - NIP: 697662
-//Aitor Arcos Almazaán - NIP: 705303
+
 package practica2;
+
+/**
+ * @author Jose Luis Varo Guzmán - NIP: 697662
+ * @author Aitor Arcos Almazaán - NIP: 705303
+ */
 
 //====================================================================//
 //======================== BINARY SEARCH TREE ========================//
@@ -88,6 +92,7 @@ public class BSTree<E extends Comparable<E>> {
 		 && newTree != null) {
 			if (newTree.getE() != null){
 				addNewTree(newTree);
+                               
 				return true;
 			}
 		}
@@ -97,7 +102,7 @@ public class BSTree<E extends Comparable<E>> {
 	private boolean addNewTree(BSTree<E> newTree) {
 		BSTree<E> parentTree = findTree(newTree.getE(),
 		 GIVE_PARENT_IF_NOT_FOUND);
-
+                
 		//Arbol vacio => lo rellenamos
 		if (getE() == null) {
 			setE(newTree.getE());

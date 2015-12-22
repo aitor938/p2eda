@@ -1,6 +1,10 @@
-//Jose Luis Varo Guzmán - NIP: 697662
-//Aitor Arcos Almazaán - NIP: 705303
+
 package practica2;
+
+/**
+ * @author Jose Luis Varo Guzmán - NIP: 697662
+ * @author Aitor Arcos Almazaán - NIP: 705303
+ */
 
 public class ColeccionAbb<Id extends Comparable<Id>,In> implements Coleccion<Id,In> {
 
@@ -32,7 +36,13 @@ public class ColeccionAbb<Id extends Comparable<Id>,In> implements Coleccion<Id,
 	public In obtenerInformacion(Id identificador) {
 		//Buscamos mediante una Tupla "dummy"
 		Tupla<Id,In> tupla = new Tupla<>(identificador,null);
-		return raiz.findTree(tupla).getE().getInformacion();
+                BSTree<Tupla<Id,In>> tree = raiz.findTree(tupla);
+                if(tree != null){    //comprueba si el arbol esta vacio,
+                                     //si es null no puede devolver nada porque no hay nada
+                    return tree.getE().getInformacion();
+                }else{
+                    return null;
+                }
 	}
 
 	public boolean borrar(Id identificador) {

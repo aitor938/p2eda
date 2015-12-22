@@ -1,6 +1,10 @@
-//Jose Luis Varo Guzmán - NIP: 697662
-//Aitor Arcos Almazaán - NIP: 705303
+
 package practica2;
+
+/**
+ * @author Jose Luis Varo Guzmán - NIP: 697662
+ * @author Aitor Arcos Almazaán - NIP: 705303
+ */
 
 public interface Coleccion<Id extends Comparable<Id>,In> {
 
